@@ -55,12 +55,16 @@ export PYTHONUTF8=1
 
 **Example Usage:**
 
-``` python
-# python simple_use.py --text_to_speech [text to be converted into audio] --text_prompt [the prompt of that audio file] --audio_path [reference audio file]
-python simple_use.py --text_to_speech "今天天氣真好" --text_prompt "在密碼學中，加密是將明文資訊改變為難以讀取的密文內容，使之不可讀的方法。" --audio_path "./data/tc_speaker.wav"
+``` bash
+bash run_single_inference.sh
 ```
 
 ``` python
-# python simple_use.py --text_to_speech [text to be converted into audio] --audio_path [reference audio file]
-python simple_use.py --text_to_speech "今天天氣真好[:ㄏㄠ3]" --audio_path "./data/tc_speaker.wav"
+# python simple_inference.py --text_to_speech [text to be converted into audio] --text_prompt [the prompt of that audio file] --audio_path [reference audio file]
+python simple_inference.py --text_to_speech "今天天氣真好" --text_prompt "在密碼學中，加密是將明文資訊改變為難以讀取的密文內容，使之不可讀的方法。" --audio_path "./data/tc_speaker.wav"
+```
+
+``` python
+# python simple_inference.py --text_to_speech [text to be converted into audio] --audio_path [reference audio file]
+python simple_inference.py --text_to_speech "今天天氣真好[:ㄏㄠ3]" --audio_path "./data/tc_speaker.wav"
 ```
