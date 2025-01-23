@@ -25,43 +25,75 @@ sys.path.append('{}/third_party/Matcha-TTS'.format(ROOT_DIR))
 
 ####new normalize
 class CustomCosyVoiceFrontEnd(CosyVoiceFrontEnd):
-    def text_normalize_new(self,text, split=True):
+    def text_normalize_new(self,text, split=False):
         text = text.strip()
-        def normalize_outside_brackets(match):
-            inner = match.group(1)  
-            outer = match.group(2)  
-            if contains_chinese(outer):
+        def split_by_brackets(input_string):
+            # Use regex to find text inside and outside the brackets
+            inside_brackets = re.findall(r'\[(.*?)\]', input_string)
+            outside_brackets = re.split(r'\[.*?\]', input_string)
+            
+            # Filter out empty strings from the outside list (result of consecutive brackets)
+            outside_brackets = [part for part in outside_brackets if part]
+            
+            return inside_brackets, outside_brackets
+        
+        def text_normalize_no_split(text, is_last=False):
+            text = text.strip()
+            if contains_chinese(text):
                 if self.use_ttsfrd:
-                    outer = self.frd.get_frd_extra_info(outer, 'input')
+                    text = self.frd.get_frd_extra_info(text, 'input')
                 else:
-                    outer = self.zh_tn_model.normalize(outer)
-                outer = outer.replace("\n", "")
-                outer = replace_blank(outer)
-                outer = replace_corner_mark(outer)
-                outer = outer.replace(".", "、")
-                outer = outer.replace(" - ", "，")
-                outer = remove_bracket(outer)
-                outer = re.sub(r'[，,]+$', '。', outer)
+                    text = self.zh_tn_model.normalize(text)
+                text = text.replace("\n", "")
+                text = replace_blank(text)
+                text = replace_corner_mark(text)
+                text = text.replace(".", "、")
+                text = text.replace(" - ", "，")
+                text = remove_bracket(text)
+                if is_last:
+                    text = re.sub(r'[，,]+$', '。', text)
             else:
                 if self.use_ttsfrd:
-                    outer = self.frd.get_frd_extra_info(outer, 'input')
+                    text = self.frd.get_frd_extra_info(text, 'input')
                 else:
-                    outer = self.en_tn_model.normalize(outer)
-                outer = spell_out_number(outer, self.inflect_parser)
-            return inner + outer
-
-        text = re.sub(r'(\[[^\]]*\])(.*?)', normalize_outside_brackets, text)
-
-        if contains_chinese(text):
-            texts = [i for i in split_paragraph(
-                text, partial(self.tokenizer.encode, allowed_special=self.allowed_special),
-                "zh", token_max_n=80, token_min_n=60, merge_len=20, comma_split=False
-            )]
-        else:
-            texts = [i for i in split_paragraph(
-                text, partial(self.tokenizer.encode, allowed_special=self.allowed_special),
-                "en", token_max_n=80, token_min_n=60, merge_len=20, comma_split=False
-            )]
+                    text = self.en_tn_model.normalize(text)
+                text = spell_out_number(text, self.inflect_parser)
+            return text
+        
+        def join_interleaved(outside, inside):
+            # Ensure the number of parts match between outside and inside
+            result = []
+            
+            # Iterate and combine alternating parts
+            for o, i in zip(outside, inside):
+                result.append(o + '[' + i + ']')
+            
+            # Append any remaining part (if outside is longer than inside)
+            if len(outside) > len(inside):
+                result.append(outside[-1])
+            
+            return ''.join(result)
+        inside_brackets, outside_brackets = split_by_brackets(text)
+        #print("io",inside_brackets, outside_brackets)
+        #text = re.sub(r'(\[[^\]]*\])(.*?)', normalize_outside_brackets, text)
+        #print(text)
+        for n in range(len(outside_brackets)):
+            e_out = text_normalize_no_split(outside_brackets[n],is_last = n == len(outside_brackets) - 1)
+            outside_brackets[n] = e_out
+            
+        text = join_interleaved(outside_brackets, inside_brackets)
+        #print()
+            
+        # if contains_chinese(text):
+        #     texts = [i for i in split_paragraph(
+        #         text, partial(self.tokenizer.encode, allowed_special=self.allowed_special),
+        #         "zh", token_max_n=80, token_min_n=60, merge_len=20, comma_split=False
+        #     )]
+        # else:
+        #     texts = [i for i in split_paragraph(
+        #         text, partial(self.tokenizer.encode, allowed_special=self.allowed_special),
+        #         "en", token_max_n=80, token_min_n=60, merge_len=20, comma_split=False
+        #     )]
 
         if split is False:
             return text
@@ -166,7 +198,10 @@ class CustomCosyVoice:
     def inference_zero_shot_no_normalize(self, tts_text, prompt_text, prompt_speech_16k):
         prompt_text = prompt_text
         tts_speeches = []
-        for i in re.split(r'(?<=[？！，。.?!])\s*', tts_text):
+        for i in re.split(r'(?<=[？！。.?!])\s*', tts_text):
+            if not len(i):
+                continue
+            print("Synthesizing:",i)
             model_input = self.frontend.frontend_zero_shot(i, prompt_text, prompt_speech_16k)
             model_output = self.model.inference(**model_input)
             tts_speeches.append(model_output['tts_speech'])
@@ -242,7 +277,8 @@ def main():
     )
     speaker_prompt_text_transcription_bopomo = get_bopomofo_rare(speaker_prompt_text_transcription, bopomofo_converter)
     print("Speaker prompt audio transcription:",speaker_prompt_text_transcription_bopomo)
-
+    
+    print("Content to be synthesized before bopomofo:",content_to_synthesize)
     content_to_synthesize_bopomo = get_bopomofo_rare(content_to_synthesize, bopomofo_converter)
     print("Content to be synthesized:",content_to_synthesize_bopomo)
     start = time.time()
