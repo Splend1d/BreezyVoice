@@ -1,0 +1,4 @@
+[console_scripts]
+matcha-data-stats = matcha.utils.generate_data_statistics:main
+matcha-tts = matcha.cli:cli
+matcha-tts-app = matcha.app:main
