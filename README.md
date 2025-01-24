@@ -106,7 +106,6 @@ The CSV file should contain the following columns:
   - **Description**: The filename (without extension) for the generated output audio. The audio will be saved as a `.wav` file in the output folder.
   - **Example**: `output`
 
----
 **Example Usage:**
 
 ``` bash
