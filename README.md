@@ -1,6 +1,6 @@
 # BreezyVoice
 
-BreezyVoice is a voice-cloning text-to-speech system specifically adapted for Taiwanese Mandarin, highlighting phonetic control abilities via auxiliary 注音 inputs.
+BreezyVoice is a voice-cloning text-to-speech system specifically adapted for Taiwanese Mandarin, highlighting phonetic control abilities via auxiliary 注音 (bopomofo) inputs. BreezyVoice is partially derived from [CosyVoice](https://github.com/FunAudioLLM/CosyVoice)
 
 [Playground](); [Model](https://huggingface.co/MediaTek-Research/BreezyVoice-300M/tree/main); [Paper]()
 
