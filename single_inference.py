@@ -18,7 +18,7 @@ from cosyvoice.cli.model import CosyVoiceModel
 from cosyvoice.cli.cosyvoice import CosyVoice
 from cosyvoice.utils.file_utils import load_wav
 from cosyvoice.utils.frontend_utils import (contains_chinese, replace_blank, replace_corner_mark,remove_bracket, spell_out_number, split_paragraph)
-from utils.word_utils import word_to_dataset_frequency, char2phn
+from utils.word_utils import word_to_dataset_frequency, char2phn, always_augment_chars
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append('{}/third_party/Matcha-TTS'.format(ROOT_DIR))
@@ -39,19 +39,27 @@ class CustomCosyVoiceFrontEnd(CosyVoiceFrontEnd):
         
         def text_normalize_no_split(text, is_last=False):
             text = text.strip()
+            text_is_terminated = text[-1] == "。"
             if contains_chinese(text):
+                #print(text)
                 if self.use_ttsfrd:
                     text = self.frd.get_frd_extra_info(text, 'input')
                 else:
                     text = self.zh_tn_model.normalize(text)
+                if not text_is_terminated and not is_last:
+                    text = text[:-1]
+                #print(text)
                 text = text.replace("\n", "")
                 text = replace_blank(text)
                 text = replace_corner_mark(text)
                 text = text.replace(".", "、")
+                #print(text)
                 text = text.replace(" - ", "，")
+                #print(text)
                 text = remove_bracket(text)
-                if is_last:
-                    text = re.sub(r'[，,]+$', '。', text)
+                #print(text)
+                text = re.sub(r'[，,]+$', '。', text)
+                #print(text)
             else:
                 if self.use_ttsfrd:
                     text = self.frd.get_frd_extra_info(text, 'input')
@@ -220,15 +228,20 @@ def get_bopomofo_rare(text, converter):
     text_w_bopomofo = [x for x in zip(list(text), res[0])]
     reconstructed_text = ""
     
-    for t in text_w_bopomofo:
+    for i in range(len(text_w_bopomofo)):
+        t = text_w_bopomofo[i]
+        try:
+            next_t_char = text_w_bopomofo[i+1][0]
+        except:
+            next_t_char = None
         #print(t[0], word_to_dataset_frequency[t[0]], t[1])
         
-        if word_to_dataset_frequency[t[0]] < 500 and t[1] != None:
+        if word_to_dataset_frequency[t[0]] < 500 and t[1] != None and next_t_char != '[':
             # Add the char and the pronunciation
             reconstructed_text += t[0] + f"[:{t[1]}]"
         
         elif len(char2phn[t[0]]) >= 2:
-            if t[1] != char2phn[t[0]][0] and word_to_dataset_frequency[t[0]] < 10000:  # Not most common pronunciation
+            if t[1] != char2phn[t[0]][0] and (word_to_dataset_frequency[t[0]] < 10000 or t[0] in always_augment_chars) and next_t_char != '[':  # Not most common pronunciation
                 # Add the char and the pronunciation
                 reconstructed_text += t[0] + f"[:{t[1]}]"
             else:
@@ -278,7 +291,7 @@ def main():
     speaker_prompt_text_transcription_bopomo = get_bopomofo_rare(speaker_prompt_text_transcription, bopomofo_converter)
     print("Speaker prompt audio transcription:",speaker_prompt_text_transcription_bopomo)
     
-    print("Content to be synthesized before bopomofo:",content_to_synthesize)
+    #print("Content to be synthesized before bopomofo:",content_to_synthesize)
     content_to_synthesize_bopomo = get_bopomofo_rare(content_to_synthesize, bopomofo_converter)
     print("Content to be synthesized:",content_to_synthesize_bopomo)
     start = time.time()
