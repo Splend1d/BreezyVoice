@@ -1,5 +1,7 @@
 from collections import Counter, defaultdict
 
+always_augment_chars = {"長"}
+
 char2phn = {
     "〇": [
         "ㄌㄧㄥ2",
