@@ -1,3 +1,4 @@
+--extra-index-url https://download.pytorch.org/whl/cu118
 conformer==0.3.2
 deepspeed==0.14.2; sys_platform == 'linux'
 diffusers==0.32.0
@@ -30,6 +31,7 @@ opencc-python-reimplemented
 g2pw
 pyarrow
 datasets
-https://www.modelscope.cn/models/speech_tts/speech_kantts_ttsfrd/resolve/master/ttsfrd_dependency-0.1-py3-none-any.whl
-https://www.modelscope.cn/models/speech_tts/speech_kantts_ttsfrd/resolve/master/ttsfrd-0.3.9-cp310-cp310-linux_x86_64.whl
+
+# https://www.modelscope.cn/models/speech_tts/speech_kantts_ttsfrd/resolve/master/ttsfrd_dependency-0.1-py3-none-any.whl
+# https://www.modelscope.cn/models/speech_tts/speech_kantts_ttsfrd/resolve/master/ttsfrd-0.3.9-cp310-cp310-linux_x86_64.whl
 
