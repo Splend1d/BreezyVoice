@@ -122,3 +122,12 @@ python batch_inference.py \
 ---
 
 If you like our work, please cite:
+
+```
+@article{hsu2025breezyvoice,
+  title={BreezyVoice: Adapting TTS for Taiwanese Mandarin with Enhanced Polyphone Disambiguation--Challenges and Insights},
+  author={Hsu, Chan-Jan and Lin, Yi-Cheng and Lin, Chia-Chun and Chen, Wei-Chih and Chung, Ho Lam and Li, Chen-An and Chen, Yi-Chang and Yu, Chien-Yu and Lee, Ming-Ji and Chen, Chien-Cheng and others},
+  journal={arXiv preprint arXiv:2501.17790},
+  year={2025}
+}
+```
