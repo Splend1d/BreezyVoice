@@ -17,7 +17,7 @@ git clone https://github.com/mtkresearch/BreezyVoice.git
 cd BreezyVoice
 ```
 
-- Install Requirements
+- Install Requirements (requires Python3.10)
 ```
 pip install -r requirements.txt
 ```
