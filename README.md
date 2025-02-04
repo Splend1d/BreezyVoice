@@ -19,10 +19,15 @@ cd BreezyVoice
 
 - Install Requirements (requires Python3.10)
 ```
+pip uninstall onnxruntime # use onnxruntime-gpu instead of onnxruntime
 pip install -r requirements.txt
 ```
 (The model is runnable on CPU, please change onnxruntime-gpu to onnxruntime in `requirements.txt` if you do not have GPU in your environment)
 
+You might need to install cudnn depending on cuda version
+```
+sudo apt-get -y install cudnn9-cuda-11
+```
 ## Inference
 
 UTF8 encoding is required:
