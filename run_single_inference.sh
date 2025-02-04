@@ -1,1 +1,1 @@
-python3 single_inference.py --speaker_prompt_audio_path "data/example.wav" --speaker_prompt_text_transcription "在密碼學中，加密是將明文資訊改變為難以讀取的密文內容，使之不可讀的方法。只有擁有解密方法的對象，經由解密過程，才能將密文還原為正常可讀的內容。" --content_to_synthesize "歡迎使用聯發創新基地 BreezyVoice 模型建。" --output_path results/out.wav
+python3 single_inference.py --speaker_prompt_audio_path "data/example.wav" --speaker_prompt_text_transcription "在密碼學中，加密是將明文資訊改變為難以讀取的密文內容，使之不可讀的方法。只有擁有解密方法的對象，經由解密過程，才能將密文還原為正常可讀的內容。" --content_to_synthesize "歡迎使用聯發創新基地 BreezyVoice 模型。" --output_path results/out.wav
