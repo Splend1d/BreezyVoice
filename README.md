@@ -135,4 +135,16 @@ If you like our work, please cite:
   journal={arXiv preprint arXiv:2501.17790},
   year={2025}
 }
+@article{hsu2025breeze,
+  title={The Breeze 2 Herd of Models: Traditional Chinese LLMs Based on Llama with Vision-Aware and Function-Calling Capabilities},
+  author={Hsu, Chan-Jan and Liu, Chia-Sheng and Chen, Meng-Hsi and Chen, Muxi and Hsu, Po-Chun and Chen, Yi-Chang and Shiu, Da-Shan},
+  journal={arXiv preprint arXiv:2501.13921},
+  year={2025}
+}
+@article{du2024cosyvoice,
+  title={Cosyvoice: A scalable multilingual zero-shot text-to-speech synthesizer based on supervised semantic tokens},
+  author={Du, Zhihao and Chen, Qian and Zhang, Shiliang and Hu, Kai and Lu, Heng and Yang, Yexin and Hu, Hangrui and Zheng, Siqi and Gu, Yue and Ma, Ziyang and others},
+  journal={arXiv preprint arXiv:2407.05407},
+  year={2024}
+}
 ```
