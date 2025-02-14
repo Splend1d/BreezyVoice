@@ -264,7 +264,7 @@ def main():
     
     parser.add_argument("--output_path", type=str, required=False, default="results/output.wav", help="Specifies the name and path for the output .wav file.")
     
-    parser.add_argument("--model_path", type=str, required=False, default = "MediaTek-Research/BreezyVoice-300M",help="Specifies the model used for speech synthesis.")
+    parser.add_argument("--model_path", type=str, required=False, default = "MediaTek-Research/BreezyVoice",help="Specifies the model used for speech synthesis.")
     args = parser.parse_args()
     
     
