@@ -124,6 +124,11 @@ python batch_inference.py \
   --output_audio_folder ./results
 ```
 
+<audio controls>
+  <source src="https://github.com/Splend1d/BreezyVoice/raw/refs/heads/main/data/example.wav" type="audio/mpeg">
+  Test
+</audio>
+
 ---
 
 If you like our work, please cite:
