@@ -58,7 +58,7 @@ export PYTHONUTF8=1
 
 - `--model_path` (optional):
   - **Description**: Specifies the pre-trained model used for speech synthesis.
-  - **Default Value**: `MediaTek-Research/BreezyVoice-300M`
+  - **Default Value**: `MediaTek-Research/BreezyVoice`
 
 **Example Usage:**
 
