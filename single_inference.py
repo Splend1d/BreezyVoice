@@ -6,6 +6,7 @@ from functools import partial
 import time
 
 import torch
+torch.set_num_threads(1)
 import torchaudio
 import whisper
 import opencc
